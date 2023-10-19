@@ -5,6 +5,23 @@ import { Feather } from "@expo/vector-icons";
 import COLORS from "../constants/COLORS";
 import ThemeContext from "../context/ThemeContext";
 
+export function formatExpression(exp) {
+  if (typeof exp === "number") return exp;
+  const map = {
+    "*": "×",
+    "/": "÷",
+  };
+  let newExpression = "";
+  for (let i = 0; i < exp.length; i++) {
+    if (exp[i] in map) {
+      newExpression += map[exp[i]];
+    } else {
+      newExpression += exp[i];
+    }
+  }
+  return newExpression;
+}
+
 export default function InputFields() {
   const fields = useContext(FieldsContext);
   const theme = useContext(ThemeContext);
@@ -22,12 +39,12 @@ export default function InputFields() {
             paddingRight: 16,
           }}
         >
-          {fields.primaryText}
+          {formatExpression(fields.primaryText)}
         </Text>
         <TouchableOpacity
           onPress={() => {
             fields.setPrimaryText((currentText) =>
-              currentText.substring(0, currentText.length - 1)
+              `${currentText}`.substring(0, currentText.length - 1)
             );
           }}
         >
@@ -48,7 +65,7 @@ export default function InputFields() {
             color: theme === "light" ? COLORS.black : COLORS.white,
           }}
         >
-          {fields.secondaryText}
+          {formatExpression(fields.secondaryText)}
         </Text>
       </View>
     </View>

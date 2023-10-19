@@ -7,11 +7,12 @@ import ThemeContext from "./context/ThemeContext";
 import FieldsContext from "./context/FieldsContext";
 import COLORS from "./constants/COLORS";
 import InputFields from "./app/InputFields";
+import Keypad from "./app/Keypad";
 
 export default function App() {
   const [theme, setTheme] = useState("light");
-  const [primaryText, setPrimaryText] = useState("15");
-  const [secondaryText, setSecondaryText] = useState("3×5");
+  const [primaryText, setPrimaryText] = useState("");
+  const [secondaryText, setSecondaryText] = useState("");
 
   // Load the last theme used
   useEffect(() => {
@@ -50,6 +51,7 @@ export default function App() {
           }}
         >
           <InputFields />
+          <Keypad />
         </FieldsContext.Provider>
       </View>
     </ThemeContext.Provider>
@@ -59,7 +61,8 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: "column-reverse",
+    flexDirection: "column",
+    justifyContent: "flex-end",
     marginTop: StatusBar.currentHeight,
   },
 });
