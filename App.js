@@ -1,51 +1,46 @@
-import { useEffect, useState } from "react";
-import { Ionicons } from "@expo/vector-icons";
-import {
-  StyleSheet,
-  Text,
-  View,
-  SafeAreaView,
-  TouchableOpacity,
-  Image,
-  StatusBar,
-} from "react-native";
+import { createContext, useContext, useEffect, useState } from "react";
+import { StyleSheet, View, StatusBar } from "react-native";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import ThemeButton from "./app/ThemeButton";
+import ThemeContext from "./context/ThemeContext";
 import COLORS from "./constants/COLORS";
 
 export default function App() {
-  const [darkMode, setDarkMode] = useState(false);
+  const [theme, setTheme] = useState("light");
+  const [primaryText, setPrimaryText] = useState("");
+  const [secondaryText, setSecondaryText] = useState("");
 
+  // Load the last theme used
   useEffect(() => {
-    async function aquireDarkMode() {
-      const storageDarkMode = await AsyncStorage.getItem("darkMode");
-      if (storageDarkMode) {
-        setDarkMode(storageDarkMode === "true" ? true : false);
+    async function loadTheme() {
+      const storedTheme = await AsyncStorage.getItem("theme");
+      if (storedTheme) {
+        setTheme(storedTheme);
       }
     }
-    aquireDarkMode();
+    loadTheme();
   }, []);
 
   async function switchTheme() {
-    await AsyncStorage.setItem("darkMode", (!darkMode).toString());
-    setDarkMode((pendingMode) => !pendingMode);
+    const newTheme = theme === "light" ? "dark" : "light";
+    await AsyncStorage.setItem("theme", newTheme);
+    setTheme(newTheme);
   }
 
   return (
-    <View
-      style={{
-        ...styles.container,
-        backgroundColor: darkMode ? COLORS.black : COLORS.lightBG,
-      }}
-    >
-      <TouchableOpacity style={styles.darkModeIcon} onPress={switchTheme}>
-        {darkMode ? (
-          <Ionicons name="ios-sunny" size={30} color={COLORS.white} />
-        ) : (
-          <Ionicons name="ios-moon" size={30} color={COLORS.black} />
-        )}
-      </TouchableOpacity>
-    </View>
+    <ThemeContext.Provider value={theme}>
+      <View
+        style={[
+          styles.container,
+          {
+            backgroundColor: theme === "light" ? COLORS.lightBG : COLORS.black,
+          },
+        ]}
+      >
+        <ThemeButton switchTheme={switchTheme} />
+      </View>
+    </ThemeContext.Provider>
   );
 }
 
@@ -53,12 +48,5 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginTop: StatusBar.currentHeight,
-  },
-  darkModeIcon: {
-    position: "absolute",
-    top: 20,
-    left: 20,
-    width: 30,
-    height: 30,
   },
 });

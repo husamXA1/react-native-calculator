@@ -1,6 +1,6 @@
 export default {
   white: "#E2E2E2",
-  offWhite: "#D2D2D2",
+  secondaryWhite: "#D2D2D2",
   black: "#2E2E2E",
   secondaryBlack: "#3E3E3E",
   lightBG: "#EBE4D1",
