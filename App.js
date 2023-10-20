@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { StyleSheet, View, StatusBar } from "react-native";
+import { StyleSheet, View } from "react-native";
+import { StatusBar } from "expo-status-bar";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import ThemeButton from "./app/ThemeButton";
@@ -54,6 +55,7 @@ export default function App() {
           <Keypad />
         </FieldsContext.Provider>
       </View>
+      <StatusBar style="dark" />
     </ThemeContext.Provider>
   );
 }
@@ -63,6 +65,5 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "column",
     justifyContent: "flex-end",
-    marginTop: StatusBar.currentHeight,
   },
 });
