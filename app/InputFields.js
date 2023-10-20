@@ -39,12 +39,13 @@ const InputFields = () => {
             paddingRight: 16,
           }}
         >
-          {formatExpression(fields.primaryText)}
+          {fields.primaryText && formatExpression(fields.primaryText)}
         </Text>
         <TouchableOpacity
           onPress={() => {
-            fields.setPrimaryText((currentText) =>
-              `${currentText}`.substring(0, currentText.length - 1)
+            fields.setPrimaryText(
+              (currentText) =>
+                currentText && currentText.substring(0, currentText.length - 1)
             );
           }}
         >
@@ -65,7 +66,7 @@ const InputFields = () => {
             color: theme === "light" ? COLORS.black : COLORS.white,
           }}
         >
-          {formatExpression(fields.secondaryText)}
+          {fields.secondaryText && formatExpression(fields.secondaryText)}
         </Text>
       </View>
     </View>

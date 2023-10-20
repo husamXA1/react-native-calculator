@@ -1,12 +1,12 @@
-import { useEffect, useState } from "react";
-import { StyleSheet, View, Platform, StatusBar } from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, StyleSheet, Platform, StatusBar } from "react-native";
 import { StatusBar as ExpoStatusBar } from "expo-status-bar";
 import * as SplashScreen from "expo-splash-screen";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import ThemeButton from "./app/ThemeButton";
 import ThemeContext from "./context/ThemeContext";
-import FieldsContext from "./context/FieldsContext";
+import FieldsContext from "./context/FieldsContext"; // Make sure this import is correct
 import COLORS from "./constants/COLORS";
 import InputFields from "./app/InputFields";
 import Keypad from "./app/Keypad";
@@ -38,27 +38,23 @@ export default function App() {
 
   return (
     <ThemeContext.Provider value={theme}>
-      <View
-        style={[
-          styles.container,
-          {
-            backgroundColor: theme === "light" ? COLORS.lightBG : COLORS.black,
-          },
-        ]}
+      <FieldsContext.Provider
+        value={{ primaryText, setPrimaryText, secondaryText, setSecondaryText }}
       >
-        <ThemeButton switchTheme={switchTheme} />
-        <FieldsContext.Provider
-          value={{
-            primaryText,
-            setPrimaryText,
-            secondaryText,
-            setSecondaryText,
-          }}
+        <View
+          style={[
+            styles.container,
+            {
+              backgroundColor:
+                theme === "light" ? COLORS.lightBG : COLORS.black,
+            },
+          ]}
         >
+          <ThemeButton switchTheme={switchTheme} />
           <InputFields />
           <Keypad />
-        </FieldsContext.Provider>
-      </View>
+        </View>
+      </FieldsContext.Provider>
       <ExpoStatusBar style="dark" />
     </ThemeContext.Provider>
   );

@@ -58,13 +58,11 @@ const Key = ({
 const NumKey = ({ value }) => {
   const theme = useContext(ThemeContext);
   const fields = useContext(FieldsContext);
-  const color = theme === "light" ? COLORS.black : COLORS.white;
-  const bgColor = theme === "light" ? COLORS.white : COLORS.black;
 
   return (
     <Key
-      color={color}
-      bgColor={bgColor}
+      color={theme === "light" ? COLORS.black : COLORS.white}
+      bgColor={theme === "light" ? COLORS.white : COLORS.black}
       value={value}
       onPress={() => {
         fields.setPrimaryText((currentValue) => `${currentValue}${value}`);
@@ -76,14 +74,13 @@ const NumKey = ({ value }) => {
 const OperatorKey = ({ value }) => {
   const theme = useContext(ThemeContext);
   const fields = useContext(FieldsContext);
-  const color = theme === "light" ? COLORS.black : COLORS.white;
-  const bgColor =
-    theme === "light" ? COLORS.secondaryWhite : COLORS.secondaryBlack;
 
   return (
     <Key
-      color={color}
-      bgColor={bgColor}
+      color={theme === "light" ? COLORS.black : COLORS.white}
+      bgColor={
+        theme === "light" ? COLORS.secondaryWhite : COLORS.secondaryBlack
+      }
       value={value}
       onPress={() => {
         fields.setPrimaryText((currentValue) => `${currentValue}${value}`);
