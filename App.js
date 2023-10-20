@@ -1,6 +1,7 @@
-import { createContext, useContext, useEffect, useState } from "react";
-import { StyleSheet, View } from "react-native";
-import { StatusBar } from "expo-status-bar";
+import { useEffect, useState } from "react";
+import { StyleSheet, View, Platform, StatusBar } from "react-native";
+import { StatusBar as ExpoStatusBar } from "expo-status-bar";
+import * as SplashScreen from "expo-splash-screen";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import ThemeButton from "./app/ThemeButton";
@@ -9,6 +10,8 @@ import FieldsContext from "./context/FieldsContext";
 import COLORS from "./constants/COLORS";
 import InputFields from "./app/InputFields";
 import Keypad from "./app/Keypad";
+
+SplashScreen.preventAutoHideAsync();
 
 export default function App() {
   const [theme, setTheme] = useState("light");
@@ -22,6 +25,7 @@ export default function App() {
       if (storedTheme) {
         setTheme(storedTheme);
       }
+      await SplashScreen.hideAsync();
     }
     loadTheme();
   }, []);
@@ -55,7 +59,7 @@ export default function App() {
           <Keypad />
         </FieldsContext.Provider>
       </View>
-      <StatusBar style="dark" />
+      <ExpoStatusBar style="dark" />
     </ThemeContext.Provider>
   );
 }
@@ -65,5 +69,6 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "column",
     justifyContent: "flex-end",
+    marginTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
   },
 });

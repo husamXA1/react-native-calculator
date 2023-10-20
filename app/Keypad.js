@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import React, { useContext } from "react";
 import {
   Dimensions,
   StyleSheet,
@@ -13,7 +13,86 @@ import { formatExpression } from "./InputFields";
 
 const windowWidth = Dimensions.get("window").width;
 
-export default function Keypad() {
+const Key = ({
+  color,
+  bgColor,
+  value,
+  onPress,
+  height = (windowWidth - 70) / 4,
+}) => {
+  const theme = useContext(ThemeContext);
+
+  return (
+    <TouchableOpacity
+      style={{
+        padding: 10,
+        backgroundColor: bgColor,
+        alignItems: "center",
+        justifyContent: "center",
+        width: (windowWidth - 70) / 4,
+        height,
+        borderRadius: 10,
+        elevation: 5,
+        shadowColor: "black",
+        shadowOffset: { width: 0, height: 5 },
+        shadowOpacity: 0.25,
+        borderColor:
+          theme === "light" ? COLORS.secondaryBlack : COLORS.secondaryWhite,
+      }}
+      onPress={onPress}
+    >
+      <Text
+        style={{
+          fontSize: 32,
+          textAlign: "center",
+          color: color,
+          fontWeight: "800",
+        }}
+      >
+        {formatExpression(value)}
+      </Text>
+    </TouchableOpacity>
+  );
+};
+
+const NumKey = ({ value }) => {
+  const theme = useContext(ThemeContext);
+  const fields = useContext(FieldsContext);
+  const color = theme === "light" ? COLORS.black : COLORS.white;
+  const bgColor = theme === "light" ? COLORS.white : COLORS.black;
+
+  return (
+    <Key
+      color={color}
+      bgColor={bgColor}
+      value={value}
+      onPress={() => {
+        fields.setPrimaryText((currentValue) => `${currentValue}${value}`);
+      }}
+    />
+  );
+};
+
+const OperatorKey = ({ value }) => {
+  const theme = useContext(ThemeContext);
+  const fields = useContext(FieldsContext);
+  const color = theme === "light" ? COLORS.black : COLORS.white;
+  const bgColor =
+    theme === "light" ? COLORS.secondaryWhite : COLORS.secondaryBlack;
+
+  return (
+    <Key
+      color={color}
+      bgColor={bgColor}
+      value={value}
+      onPress={() => {
+        fields.setPrimaryText((currentValue) => `${currentValue}${value}`);
+      }}
+    />
+  );
+};
+
+const Keypad = () => {
   const theme = useContext(ThemeContext);
   const fields = useContext(FieldsContext);
 
@@ -73,12 +152,10 @@ export default function Keypad() {
               return;
             }
             try {
-              // Try to evaluate the expression
               const result = eval(expression);
-              // Check if the result is a valid number
               if (typeof result === "number" && !isNaN(result)) {
                 fields.setSecondaryText([...fields.primaryText]);
-                fields.setPrimaryText(result);
+                fields.setPrimaryText(result.toString());
               } else {
                 fields.setSecondaryText("ERROR");
               }
@@ -91,84 +168,10 @@ export default function Keypad() {
       </View>
     </View>
   );
-}
-
-function Key({
-  color,
-  bgColor,
-  value,
-  onPress,
-  height = (windowWidth - 70) / 4,
-}) {
-  const theme = useContext(ThemeContext);
-  return (
-    <TouchableOpacity
-      style={{
-        padding: 10,
-        backgroundColor: bgColor,
-        alignItems: "center",
-        justifyContent: "center",
-        width: (windowWidth - 70) / 4,
-        height,
-        borderRadius: 10,
-        elevation: 5,
-        shadowColor: "black",
-        shadowOffset: { width: 0, height: 5 },
-        shadowOpacity: 0.25,
-        borderColor:
-          theme === "light" ? COLORS.secondaryBlack : COLORS.secondaryWhite,
-      }}
-      onPress={onPress}
-    >
-      <Text
-        style={{
-          fontSize: 32,
-          textAlign: "center",
-          color: color,
-          fontWeight: "800",
-        }}
-      >
-        {formatExpression(value)}
-      </Text>
-    </TouchableOpacity>
-  );
-}
-
-function NumKey({ value }) {
-  const theme = useContext(ThemeContext);
-  const fields = useContext(FieldsContext);
-  const color = theme === "light" ? COLORS.black : COLORS.white;
-  const bgColor = theme === "light" ? COLORS.white : COLORS.black;
-  return (
-    <Key
-      color={color}
-      bgColor={bgColor}
-      value={value}
-      onPress={() => {
-        fields.setPrimaryText((currentValue) => currentValue + value);
-      }}
-    />
-  );
-}
-
-function OperatorKey({ value }) {
-  const theme = useContext(ThemeContext);
-  const fields = useContext(FieldsContext);
-  const color = theme === "light" ? COLORS.black : COLORS.white;
-  const bgColor =
-    theme === "light" ? COLORS.secondaryWhite : COLORS.secondaryBlack;
-  return (
-    <Key
-      color={color}
-      bgColor={bgColor}
-      value={value}
-      onPress={() => {
-        fields.setPrimaryText((currentValue) => currentValue + value);
-      }}
-    />
-  );
-}
+};
 
 const styles = StyleSheet.create({
   column: { gap: 10 },
 });
+
+export default Keypad;

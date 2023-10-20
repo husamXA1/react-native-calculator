@@ -1,11 +1,11 @@
-import { useContext } from "react";
-import FieldsContext from "../context/FieldsContext";
-import { TouchableOpacity, View, Text } from "react-native";
+import React, { useContext } from "react";
+import { View, Text, TouchableOpacity } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import COLORS from "../constants/COLORS";
 import ThemeContext from "../context/ThemeContext";
+import FieldsContext from "../context/FieldsContext";
 
-export function formatExpression(exp) {
+export const formatExpression = (exp) => {
   if (typeof exp === "number") return exp;
   const map = {
     "*": "×",
@@ -20,9 +20,9 @@ export function formatExpression(exp) {
     }
   }
   return newExpression;
-}
+};
 
-export default function InputFields() {
+const InputFields = () => {
   const fields = useContext(FieldsContext);
   const theme = useContext(ThemeContext);
 
@@ -70,4 +70,6 @@ export default function InputFields() {
       </View>
     </View>
   );
-}
+};
+
+export default InputFields;

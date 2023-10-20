@@ -1,11 +1,12 @@
+import React, { useContext } from "react";
 import { StyleSheet, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { useContext } from "react";
 import ThemeContext from "../context/ThemeContext";
 import COLORS from "../constants/COLORS";
 
-export default function ThemeButton({ switchTheme }) {
+const ThemeButton = ({ switchTheme }) => {
   const theme = useContext(ThemeContext);
+
   return (
     <TouchableOpacity style={styles.darkModeIcon} onPress={switchTheme}>
       {theme === "dark" ? (
@@ -15,7 +16,7 @@ export default function ThemeButton({ switchTheme }) {
       )}
     </TouchableOpacity>
   );
-}
+};
 
 const styles = StyleSheet.create({
   darkModeIcon: {
@@ -26,3 +27,5 @@ const styles = StyleSheet.create({
     height: 30,
   },
 });
+
+export default ThemeButton;
